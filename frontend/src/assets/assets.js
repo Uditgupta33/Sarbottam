@@ -52,8 +52,6 @@ import endoscopy from './endoscopy.webp'
 import ent from './ent.webp'
 import generalSurgon from './generalSurgon.webp'
 import gyno from './gyno.webp'
-import hero2 from './heroimag2.webp'
-import hero1 from './heroImg.webp'
 import icu from './icu.webp'
 import infertility from './infertility.webp'
 import internalMedice from './internalMedicine.webp'
@@ -120,8 +118,6 @@ export const assets = {
     ent,
     generalSurgon,
     gyno,
-    hero1,
-    hero2,
     icu,
     infertility,
     internalMedice,
