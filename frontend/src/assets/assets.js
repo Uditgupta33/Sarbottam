@@ -232,7 +232,7 @@ export const doctors = [
     },
     {
         _id: 'doc5',
-        name: 'Dr. Rampukar Sah',
+        name: 'Dr.Rampukar Sah',
         image: rampukar,
         speciality: 'Anesthesiologist, Critical Care, ICU & Pain Management',
         degree: 'MBBS, MD (TUTH)',

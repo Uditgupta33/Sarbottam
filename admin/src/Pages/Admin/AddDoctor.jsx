@@ -48,25 +48,33 @@ const AddDoctor = () => {
         console.log(`${key} : ${value}`);
       });
 
-      const { data } = await axios.post(
-        backendUrl + '/api/admin/add-doctor',
-        formData,
-        { headers: { aToken } }
-      );
+      const { data } = await axios.post(backendUrl + '/api/admin/add-doctor' , formData, {headers:{aToken}})
 
       if (data.success) {
         toast.success(data.message);
+        SetDocImg(false)
+        SetName("")
+        SetPassword("")
+        SetEmail("")
+        setAddress1("")
+        setAddress2("")
+        setDegree("")
+        setAbout("")
+        setFees("")
       } else {
         toast.error(data.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message)
+      console.log(error)
+    }
   };
 
   return (
     <form onSubmit={onSubmitHandler} className="m-5 w-full">
       <p className="mb-3 text-lg font-medium">Add Doctor</p>
 
-      <div className="bg-white px-8 border rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
+      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] overflow-y-scroll">
         <div className="flex items-center gap-4 mb-8 text-gray-500">
           <label htmlFor="doc-img">
             <img
@@ -169,11 +177,19 @@ const AddDoctor = () => {
                 name=""
                 id=""
               >
-                <option value="General_physician">General physician</option>
+                <option value="General physician">General physician</option>
                 <option value="Gynecologist">Gynecologist</option>
                 <option value="Dermatologist">Dermatologist</option>
                 <option value="Pediatricians">Pediatricians</option>
                 <option value="Neurologist">Neurologist</option>
+                <option value="Ortho & trauma Surgeon">Ortho & trauma Surgeon</option>
+                <option value="Consultant Uro Surgeon">Consultant Uro Surgeon</option>
+                <option value="Consultant General & Laparoscopic Surgeon">Consultant General & Laparoscopic Surgeon</option>
+                <option value=" Anesthesiologist, Critical Care, ICU & Pain Management"> Anesthesiologist, Critical Care, ICU & Pain Management</option>
+                <option value=" Consultant Radiologist"> Consultant Radiologist</option>
+                <option value=" Maxillofacial Surgeon"> Maxillofacial Surgeon</option>
+                <option value=" ENT"> ENT</option>
+                <option value="Brain & Spine Surgeon">Brain & Spine Surgeon</option>
               </select>
             </div>
 
