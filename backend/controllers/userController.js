@@ -106,20 +106,20 @@ const registerUser = async (req, res) => {
                 return res.json({success:false,message:"Data Missing"})
             }
 
-            // await userModel.findByIdAndDelete(userId,{name,phone,address: JSON.parse(address),dob,gender})
+            await userModel.findByIdAndUpdate(userId,{name,phone,address: JSON.parse(address),dob,gender})
 
-            // Update user profile (without image initially)
-        await userModel.findByIdAndUpdate(
-            userId,
-            { 
-                name, 
-                phone, 
-                address: JSON.parse(address), 
-                dob, 
-                gender 
-            },
-            { new: true } // This ensures the updated document is returned
-        );
+        // Update user profile (without image initially)
+        // await userModel.findByIdAndUpdate(
+        //     userId,
+        //     { 
+        //         name, 
+        //         phone, 
+        //         address: JSON.parse(address), 
+        //         dob, 
+        //         gender 
+        //     },
+        //     { new: true } // This ensures the updated document is returned
+        // );
 
 
             if (imageFile) {
@@ -181,12 +181,12 @@ const registerUser = async (req, res) => {
             const appointmentData = {
                 userId,
                 docId,
-                userData,
+                userData,  
                 docData,
                 amount:docData.fees,
                 slotTime,
                 slotDate,
-                date: Date.now()
+                Date: Date.now()
             }
 
             const newAppointment = new appointmentModel(appointmentData)
@@ -203,4 +203,59 @@ const registerUser = async (req, res) => {
 
     }
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment }
+    // API to get user appointments for frontend my-appointments page
+
+    const listAppointment = async (req,res) => {
+        
+        try {
+            
+            const {userId} = req.body
+            const appointments = await appointmentModel.find({userId})
+
+            res.json({ success: true, appointments })
+            
+        } catch (error) {
+            console.log(error)
+            res.json({ success: false, message: error.message})
+        }
+
+    }
+
+    // API to cancel Appointment 
+    const cancelAppoinment = async (req, res) => {
+
+        try {
+
+            const {userId, appointmentId} = req.body
+
+            const appointmentData = await appointmentModel.findById(appointmentId)
+
+            // verify appointment user 
+            if (appointmentData.userId !== userId ) {
+                return res.json({ success: false, message:"Unauthorized action"})
+            }
+
+            await appointmentModel.findByIdAndUpdate(appointmentId, {cancelled:true})
+
+            // releasing doctor slot 
+
+            const { docId, slotDate, slotTime } = appointmentData
+
+            const doctorData = await doctorModel.findById(docId)
+
+            let slots_booked = doctorData.slots_booked
+
+            slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime )
+
+            await doctorModel.findByIdAndUpdate(docId, {slots_booked})
+
+            res.json({ success:true, message: 'Appointment Cancelled'})
+            
+        } catch (error) {
+            console.log(error)
+            res.json({ success: false, message: error.message})
+        }
+
+    }
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppoinment }

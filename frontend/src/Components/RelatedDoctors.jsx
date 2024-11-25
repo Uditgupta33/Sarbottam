@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../Context/AppContext'
 import { useNavigate } from 'react-router-dom'
 
+// type RelatedDoctorsType
+
+
 const RelatedDoctors = ({docId, speciality}) => {
 
     const {doctors} = useContext(AppContext)
@@ -12,6 +15,7 @@ const RelatedDoctors = ({docId, speciality}) => {
     useEffect(() => {
         if (doctors.length > 0 && speciality) {
             const doctorData = doctors.filter((doc)=> doc.speciality && docId._id !== docId )
+            doctorData[0]
             setRelDoc(doctorData)
         }
     }, [docId, speciality, doctors])
